@@ -20,7 +20,7 @@ class Student(Person):
         self.id = student_id
         self.course = course
         self.grades = []
-        self.mentor = ""
+        self.mentor = None
 
     def set_student_details(self, student_id, course):
         self.id = student_id
@@ -42,8 +42,8 @@ class Student(Person):
         self.mentor = professor.name
 
     def get_mentor(self):
-        if self.mentor != "":
-            return self.mentor
+        if self.mentor != None:
+            return f"{self.name} is being mentored by {self.mentor.name}"
         else:
             return "No mentor assigned"
 
@@ -53,6 +53,7 @@ class Professor(Person):
         self.id = staff_id
         self.department = department
         self.salary = salary
+        self.mentoring = []
 
     def set_professor_details(self, staff_id, department, salary):
         self.id = staff_id
@@ -67,7 +68,11 @@ class Professor(Person):
     
     def mentor_student(self, student: Student):
         student.mentor = self
+        self.mentoring.append(student)
         print(f"Professor {self.name} is now mentoring Student {student.name} on {student.course}")
+
+    def get_mentored_students(self):
+        return [student.name for student in self.mentoring]
 
 class Administrator(Person):
     def __init__(self, name, age, gender, admin_id, office, years_of_service):
@@ -113,3 +118,7 @@ admin.increment_service_years()
 print(student1.get_student_summary())
 print(prof1.get_professor_summary())
 print(admin.get_admin_summary())
+
+prof1.mentor_student(student1)
+print(student1.get_mentor())
+print(prof1.get_mentored_students())
